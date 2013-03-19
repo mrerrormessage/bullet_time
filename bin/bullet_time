@@ -4,6 +4,7 @@ $:.unshift(File.dirname(__FILE__) + '/../lib') unless $:.include?(File.dirname(_
 
 require 'optparse'
 require 'bullet_time'
+require 'ruby-prof'
 
 parsed_args = {}
 
@@ -29,4 +30,20 @@ parser.parse!(ARGV)
 
 parsed_args[:count] = 1 unless parsed_args[:count]
 
-BulletTime.run_scene(parsed_args)
+scene_data = BulletTime.run_scene(parsed_args)
+
+#TODO: Move this into BulletTime lib
+results = ""
+printer = RubyProf::FlatPrinter.new(scene_data)
+printer.print(STDOUT)
+#printer.print(StringIO.new(results))
+#results.inspect
+#result_lines = results.lines
+#result_lines.each do |line|
+#  if /Net::HTTP#start/.match line
+#    puts line
+#  end
+#  if /wait/.match line
+#    puts line
+#  end
+#end
