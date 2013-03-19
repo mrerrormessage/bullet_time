@@ -7,17 +7,25 @@ require 'bullet_time'
 
 parsed_args = {}
 
-OptionParser.new do |opts|
+parser = OptionParser.new do |opts|
+
   opts.on("-u", "--url [NEO4J_URL]", "URL where neo4j is located, including credentials, if any") do |url|
     parsed_args[:url] = url
   end
-  opts.on("-n", "--num [NUMBER_OF_TIMES]", "Number of times to run scene") do |num|
+  opts.on("-n", "--num [NUMBER_OF_TIMES]", Integer, "Number of times to run scene") do |num|
     parsed_args[:count] = num
   end
   opts.on("-q", "--query [CYPHER_QUERY]", "Cypher query to run against neo4j") do |query|
     parsed_args[:query] = query
   end
+
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
 end
+
+parser.parse!(ARGV)
 
 parsed_args[:count] = 1 unless parsed_args[:count]
 
